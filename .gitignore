@@ -10,6 +10,10 @@ dist/
 # Compiled Java class files
 *.class
 
+# Ignore Eclipse Project Settings
+*.project
+*.classpath
+
 # Compiled Python bytecode
 *.py[cod]
 
@@ -48,3 +52,4 @@ Thumbs.db
 *.mov
 *.wmv
 
+/bin/
