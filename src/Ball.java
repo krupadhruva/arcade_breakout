@@ -34,7 +34,9 @@ public class Ball extends Actor {
 			dy = dy * -1;
 		}
 
-		if(this.getOneIntersectingObject(Paddle.class).equals(Paddle.class)){
+		if(this.getOneIntersectingObject(Paddle.class) == null){
+
+		}else if(this.getOneIntersectingObject(Paddle.class).getClass().getTypeName().equals(Paddle.class.getTypeName())){
 			dy = dy * -1;
 		}
 			
