@@ -26,8 +26,14 @@ public class Game extends Application {
 		Ball ball = new Ball(5, 5);
 		ball.setX(300);
 		ball.setY(200);
-		
+
+		Paddle paddle = new Paddle();
+		paddle.setX(300);
+		paddle.setY(350);
+
 		ballWorld.add(ball);
+
+		ballWorld.add(paddle);
 		
 		ballWorld.start();
 		

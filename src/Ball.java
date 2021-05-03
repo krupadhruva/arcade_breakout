@@ -33,6 +33,10 @@ public class Ball extends Actor {
 				|| this.getY() <= 0) {
 			dy = dy * -1;
 		}
+
+		if(this.getOneIntersectingObject(Paddle.class).equals(Paddle.class)){
+			dy = dy * -1;
+		}
 			
 	}
 
