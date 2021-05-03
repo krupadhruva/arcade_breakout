@@ -1,19 +1,22 @@
 
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
 public abstract class World extends Pane {
 	
 	// Attributes
 	private AnimationTimer timer;
-	
+	private final HashSet<KeyCode> keyDown;
 	
 	// Constructor
 	public World() {
-		
+		keyDown = new HashSet<>();
 		timer = new AnimationTimer() {
 			
 			@Override
@@ -47,7 +50,19 @@ public abstract class World extends Pane {
 	public void remove(Actor actor) {
 		this.getChildren().remove((Node) actor);
 	}
-	
+
+	public void addKeyDown(KeyCode key) {
+		keyDown.add(key);
+	}
+
+	public void removeKeyDown(KeyCode key) {
+		keyDown.remove(key);
+	}
+
+	public boolean isKeyDown(KeyCode key) {
+		return keyDown.contains(key);
+	}
+
 	public <A extends Actor> java.util.List<A> getObjects(java.lang.Class<A> cls) {
 		
 		ArrayList<A> list = new ArrayList<A>();

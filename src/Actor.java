@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 
 public abstract class Actor extends ImageView {
@@ -44,19 +45,16 @@ public abstract class Actor extends ImageView {
 	}
 	
 	public <A extends Actor> A getOneIntersectingObject(java.lang.Class<A> cls) {
-		
-		ArrayList<A> list = new ArrayList<A>();
-		
-		for (A object : list) {
+		for (Node obj : getWorld().getChildren()) {
+			A object = (A) obj;
 			if (!object.equals(this) && 
 					object.getClass().getTypeName().equals(cls.getTypeName()) &&
 					object.intersects(this.getBoundsInParent())) {
 				return object;
 			}
 		}
-		
+
 		return null;
-		
 	}
 	
 	public abstract void act(long now);
