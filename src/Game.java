@@ -18,26 +18,26 @@ public class Game extends Application {
 		stage.setTitle("Ball Game");
 		
 		BorderPane screen = new BorderPane();
-
+		
+		// BallWorld Objects
 		Paddle paddle = new Paddle();
 		paddle.setX(300);
 		paddle.setY(350);
-
+		
+		Ball ball = new Ball(5, 5);
+		ball.setX(300);
+		ball.setY(200);
+		
+		// BallWorld
 		BallWorld ballWorld = new BallWorld();
 		ballWorld.setPrefWidth(600);
 		ballWorld.setPrefHeight(400);
 		ballWorld.setOnMouseMoved(mouseEvent -> paddle.setX(mouseEvent.getX() - paddle.getWidth()/2.0));
-
 		ballWorld.setOnKeyPressed(keyEvent -> ballWorld.addKeyDown(keyEvent.getCode()));
-
 		ballWorld.setOnKeyReleased(keyEvent -> ballWorld.removeKeyDown(keyEvent.getCode()));
 
 		screen.setCenter(ballWorld);
-
-		Ball ball = new Ball(5, 5);
-		ball.setX(300);
-		ball.setY(200);
-
+		
 		ballWorld.add(ball);
 		ballWorld.add(paddle);
 		ballWorld.start();

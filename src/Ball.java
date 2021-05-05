@@ -25,6 +25,7 @@ public class Ball extends Actor {
 		
 		this.move(dx, dy);
 		
+		// Wall collision
 		if (this.getX() + this.getWidth() >= this.getWorld().getWidth()
 				|| this.getX() <= 0) {
 			dx = dx * -1;
@@ -34,10 +35,35 @@ public class Ball extends Actor {
 			dy = dy * -1;
 		}
 
+		// Paddle collision
 		if(this.getOneIntersectingObject(Paddle.class) == null){
 
-		}else if(this.getOneIntersectingObject(Paddle.class).getClass().getTypeName().equals(Paddle.class.getTypeName())){
+		}
+		else if (this.getOneIntersectingObject(Paddle.class).getClass().getTypeName().equals(Paddle.class.getTypeName())){
 			dy = dy * -1;
+		}
+		
+		// Brick collision
+		if(this.getOneIntersectingObject(Brick.class) == null){
+
+		}
+		else if (this.getOneIntersectingObject(Brick.class).getClass().getTypeName().equals(Brick.class.getTypeName())) {
+			
+			Brick brick = this.getOneIntersectingObject(Brick.class);
+			
+			if (this.getX() + this.getWidth()/2 >= brick.getX()
+					&& this.getX() + this.getWidth()/2 <= brick.getX() + brick.getWidth()) {
+				dy = dy * -1;
+			}
+			else if (this.getY() + this.getHeight()/2 >= brick.getY()
+					&& this.getY() + this.getHeight()/2 <= brick.getY() + brick.getHeight()) {
+				dx = dx * -1;
+			}
+			else {
+				dx = dx * -1;
+				dy = dy * -1;
+			}
+			
 		}
 			
 	}
