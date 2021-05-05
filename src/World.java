@@ -1,5 +1,4 @@
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -67,7 +66,8 @@ public abstract class World extends Pane {
 		
 		ArrayList<A> list = new ArrayList<A>();
 		
-		for (A object : list) {
+		for (Node obj : this.getChildren()) {
+			A object = (A) obj;
 			if (object.getClass().getTypeName().equals(cls.getTypeName())) {
 				list.add(object);
 			}
