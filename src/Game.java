@@ -28,6 +28,17 @@ public class Game extends Application {
 		ball.setX(300);
 		ball.setY(200);
 		
+		// test bricks; remove if you need to
+		Brick brick1 = new Brick();
+		brick1.setX(400);
+		brick1.setY(200);
+		Brick brick2 = new Brick();
+		brick2.setX(450);
+		brick2.setY(200);
+		Brick brick3 = new Brick();
+		brick3.setX(500);
+		brick3.setY(200);
+		
 		// BallWorld
 		BallWorld ballWorld = new BallWorld();
 		ballWorld.setPrefWidth(600);
@@ -40,6 +51,9 @@ public class Game extends Application {
 		
 		ballWorld.add(ball);
 		ballWorld.add(paddle);
+		ballWorld.add(brick1);
+		ballWorld.add(brick2);
+		ballWorld.add(brick3);
 		ballWorld.start();
 
 		Scene scene = new Scene(screen);

@@ -64,6 +64,8 @@ public class Ball extends Actor {
 				dy = dy * -1;
 			}
 			
+			brick.getWorld().remove(brick);
+			
 		}
 			
 	}
