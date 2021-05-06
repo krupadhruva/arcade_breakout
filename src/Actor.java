@@ -48,11 +48,13 @@ public abstract class Actor extends ImageView {
 	public <A extends Actor> A getOneIntersectingObject(java.lang.Class<A> cls) {
 		
 		for (Node obj : this.getWorld().getChildren()) {
-			A object = (A) obj;
-			if (!object.equals(this) && 
-					object.getClass().getTypeName().equals(cls.getTypeName()) &&
-					object.intersects(this.getBoundsInParent())) {
-				return object;
+			if(obj instanceof Actor) {
+				A object = (A) obj;
+				if (!object.equals(this) &&
+						object.getClass().getTypeName().equals(cls.getTypeName()) &&
+						object.intersects(this.getBoundsInParent())) {
+					return object;
+				}
 			}
 		}
 

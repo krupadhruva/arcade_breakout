@@ -44,7 +44,13 @@ public class Ball extends Actor {
 	public void act(long now) {
 		
 		this.move(dx, dy);
-		
+
+		//score adjustment
+		if((this.getY() + this.getHeight()) >= this.getWorld().getHeight()){
+			int value = ((BallWorld)getWorld()).getScore().getValue() - 1000;
+			((BallWorld)getWorld()).getScore().setValue(value);
+		}
+
 		// Wall collision: Restore velocity along X & Y axis to prevent gain
 		// Done by flipping direction by restoring magnitude
 		if ((this.getX() + this.getWidth()) >= this.getWorld().getWidth()
@@ -88,6 +94,11 @@ public class Ball extends Actor {
 		// Brick collision
 		final Brick brick = this.getOneIntersectingObject(Brick.class);
 		if (brick != null){
+			//set score after hitting brick
+			int value = ((BallWorld)getWorld()).getScore().getValue() + 100;
+			((BallWorld)getWorld()).getScore().setValue(value);
+
+
 			if (this.getX() + this.getWidth()/2 >= brick.getX()
 					&& this.getX() + this.getWidth()/2 <= brick.getX() + brick.getWidth()) {
 				dy = dy * -1;
@@ -103,5 +114,7 @@ public class Ball extends Actor {
 
 			brick.getWorld().remove(brick);
 		}
+
+
 	}
 }

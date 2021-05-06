@@ -23,7 +23,10 @@ public abstract class World extends Pane {
 				act(now);
 				
 				for (Node actor : getChildren()) {
-					((Actor)actor).act(now);
+					if(actor instanceof Actor){
+						((Actor)actor).act(now);
+					}
+
 				}
 			}
 			
