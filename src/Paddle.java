@@ -12,9 +12,9 @@ public class Paddle extends Actor{
     @Override
     public void act(long now) {
         final double delta = 5.0;
-        if (getWorld().isKeyDown(KeyCode.LEFT)) {
+        if (getWorld().isKeyDown(KeyCode.LEFT) && getX() > 0.0) {
             move(-delta, 0.0);
-        } else if (getWorld().isKeyDown(KeyCode.RIGHT)) {
+        } else if (getWorld().isKeyDown(KeyCode.RIGHT) && (getX() + getWidth()) < getWorld().getWidth()) {
             move(delta, 0.0);
         }
     }
