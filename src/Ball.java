@@ -13,11 +13,13 @@ public class Ball extends Actor {
 	final private double origDx;
 	final private double origDy;
 
+	// Comparing doubles with user defined precision
 	static double round(double val, double precision) {
 		double factor = Math.pow(10.0, precision);
 		return (double)((int)(val * factor))/factor;
 	}
 
+	// Helper method to find direction of ball
 	static double getSign(double val) {
 		return val < 0.0 ? -1.0 : 1.0;
 	}
@@ -48,13 +50,13 @@ public class Ball extends Actor {
 		if ((this.getX() + this.getWidth()) >= this.getWorld().getWidth()
 				|| (this.getX() - this.getWidth()) <= 0) {
 			magnitudeAltered = false;
-			dx = -0.1 * origDx * getSign(dx);
+			dx = -1.0 * origDx * getSign(dx);
 		}
 
 		if ((this.getY() + this.getHeight()) >= this.getWorld().getHeight()
 				|| (this.getY() - this.getHeight()) <= 0) {
 			magnitudeAltered = false;
-			dy = -0.1 * origDy * getSign(dy);
+			dy = -1.0 * origDy * getSign(dy);
 		}
 
 		// Paddle collision: Alter the X & Y velocity to give a sharp bounce
