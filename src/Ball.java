@@ -70,7 +70,7 @@ public class Ball extends Actor {
 
 		// Paddle collision: Alter the X & Y velocity to give a sharp bounce
 		// Done by flipping direction if needed and magnitude by a factor
-		final Paddle paddle = getOneIntersectingObject(Paddle.class);
+		Paddle paddle = getOneIntersectingObject(Paddle.class);
 		if (paddle == null) {
 			didHitPaddle = false;
 		}
@@ -112,7 +112,7 @@ public class Ball extends Actor {
 		}
 		
 		// Brick collision
-		final Brick brick = this.getOneIntersectingObject(Brick.class);
+		Brick brick = this.getOneIntersectingObject(Brick.class);
 		if (brick != null){
 			//set score after hitting brick
 			int value = ((BallWorld)getWorld()).getScore().getValue() + 100;
@@ -132,7 +132,7 @@ public class Ball extends Actor {
 				dy = dy * -1;
 			}
 
-			brick.getWorld().remove(brick);
+			getWorld().remove(brick);
 		}
 
 
