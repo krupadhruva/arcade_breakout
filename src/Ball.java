@@ -5,11 +5,29 @@ public class Ball extends Actor {
 	// Attributes
 	private double dx;
 	private double dy;
-	
-	
+
+	// Used to prevent altering magnitude on continuous repeat collisions
+	private boolean magnitudeAltered;
+
+	// Required to restore magnitude to prevent gain/dampening effect
+	final private double origDx;
+	final private double origDy;
+
+	static double round(double val, double precision) {
+		double factor = Math.pow(10.0, precision);
+		return (double)((int)(val * factor))/factor;
+	}
+
+	static double getSign(double val) {
+		return val < 0.0 ? -1.0 : 1.0;
+	}
+
 	// Constructor
 	public Ball(double dx, double dy) {
-		
+		origDx = dx;
+		origDy = dy;
+		magnitudeAltered = false;
+
 		String path = getClass().getClassLoader().getResource("resources/ball.png").toString();
 		Image img = new Image(path);
 		this.setImage(img);
@@ -25,32 +43,49 @@ public class Ball extends Actor {
 		
 		this.move(dx, dy);
 		
-		// Wall collision
-		if (this.getX() + this.getWidth() >= this.getWorld().getWidth()
-				|| this.getX() <= 0) {
-			dx = dx * -1;
-		}
-		else if (this.getY() + this.getHeight() >= this.getWorld().getHeight()
-				|| this.getY() <= 0) {
-			dy = dy * -1;
+		// Wall collision: Restore velocity along X & Y axis to prevent gain
+		// Done by flipping direction by restoring magnitude
+		if ((this.getX() + this.getWidth()) >= this.getWorld().getWidth()
+				|| (this.getX() - this.getWidth()) <= 0) {
+			magnitudeAltered = false;
+			dx = -0.1 * origDx * getSign(dx);
 		}
 
-		// Paddle collision
-		if(this.getOneIntersectingObject(Paddle.class) == null){
-
+		if ((this.getY() + this.getHeight()) >= this.getWorld().getHeight()
+				|| (this.getY() - this.getHeight()) <= 0) {
+			magnitudeAltered = false;
+			dy = -0.1 * origDy * getSign(dy);
 		}
-		else if (this.getOneIntersectingObject(Paddle.class).getClass().getTypeName().equals(Paddle.class.getTypeName())){
-			dy = dy * -1;
+
+		// Paddle collision: Alter the X & Y velocity to give a sharp bounce
+		// Done by flipping direction if needed and magnitude by a factor
+		final Paddle paddle = getOneIntersectingObject(Paddle.class);
+		if (paddle != null){
+			final double fromLeftEdge = round(getX() - (paddle.getX() - paddle.getWidth()/2.0), 2);
+
+			// Between 1/3rd and 2/3rd (for others, we alter magnitude)
+			dy = -dy;
+
+			if (fromLeftEdge < paddle.getWidth()/3.0) {
+				// 1/3rd and lower region
+				if (!magnitudeAltered) {
+					magnitudeAltered = true;
+					dy = 0.8 * dy;
+					dx = 1.2 * dx;
+				}
+			} else if (fromLeftEdge >= paddle.getWidth() * 2.0/3.0) {
+				// 2/3rd and greater region
+				if (!magnitudeAltered) {
+					magnitudeAltered = true;
+					dy = 0.8 * dy;
+					dx = 1.2 * dx;
+				}
+			}
 		}
 		
 		// Brick collision
-		if(this.getOneIntersectingObject(Brick.class) == null){
-
-		}
-		else if (this.getOneIntersectingObject(Brick.class).getClass().getTypeName().equals(Brick.class.getTypeName())) {
-			
-			Brick brick = this.getOneIntersectingObject(Brick.class);
-			
+		final Brick brick = this.getOneIntersectingObject(Brick.class);
+		if (brick != null){
 			if (this.getX() + this.getWidth()/2 >= brick.getX()
 					&& this.getX() + this.getWidth()/2 <= brick.getX() + brick.getWidth()) {
 				dy = dy * -1;
@@ -63,11 +98,8 @@ public class Ball extends Actor {
 				dx = dx * -1;
 				dy = dy * -1;
 			}
-			
-			brick.getWorld().remove(brick);
-			
-		}
-			
-	}
 
+			brick.getWorld().remove(brick);
+		}
+	}
 }
