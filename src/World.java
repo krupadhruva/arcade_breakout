@@ -21,8 +21,12 @@ public abstract class World extends Pane {
 			@Override
 			public void handle(long now) {
 				act(now);
-				
-				for (Node actor : getChildren()) {
+
+				// Do not allow mutating the list when we are traversing
+				// By calling toArray(), we get a copy of all elements in the list
+				// and we are iterating on the copy instead of the list. This will
+				// allow removing nodes in call to act() when we traverse the list
+				for (Object actor : getChildren().toArray()) {
 					if(actor instanceof Actor){
 						((Actor)actor).act(now);
 					}
