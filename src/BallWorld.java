@@ -15,12 +15,10 @@ public class BallWorld extends World {
 		return score;
 	}
 
+	
 	@Override
 	public void act(long now) {
 		
-
 	}
-
-
 
 }

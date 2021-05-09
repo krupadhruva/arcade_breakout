@@ -68,6 +68,11 @@ public abstract class World extends Pane {
 	public boolean isKeyDown(KeyCode key) {
 		return keyDown.contains(key);
 	}
+	
+	public boolean isNoKeyDown() {
+		if (keyDown.isEmpty()) return true;
+		else return false;
+	}
 
 	public <A extends Actor> java.util.List<A> getObjects(java.lang.Class<A> cls) {
 		

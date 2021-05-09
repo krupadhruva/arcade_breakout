@@ -9,7 +9,7 @@ public class Ball extends Actor {
 	// Used to prevent altering magnitude on continuous repeat collisions
 	private boolean magnitudeAltered;
 	
-	private boolean didHitPaddle;
+	private boolean didCollideWithPaddle;
 
 	// Required to restore magnitude to prevent gain/dampening effect
 	final private double origDx;
@@ -31,7 +31,7 @@ public class Ball extends Actor {
 		origDx = dx;
 		origDy = dy;
 		magnitudeAltered = false;
-		didHitPaddle = false;
+		didCollideWithPaddle = false;
 
 		String path = getClass().getClassLoader().getResource("resources/ball.png").toString();
 		Image img = new Image(path);
@@ -72,11 +72,11 @@ public class Ball extends Actor {
 		// Done by flipping direction if needed and magnitude by a factor
 		Paddle paddle = getOneIntersectingObject(Paddle.class);
 		if (paddle == null) {
-			didHitPaddle = false;
+			didCollideWithPaddle = false;
 		}
 		else {
 			
-			if (!didHitPaddle) {
+			if (!didCollideWithPaddle) {
 				final double fromLeftEdge = round(getX() - paddle.getX(), 2);
 
 				// Between 1/3rd and 2/3rd (for others, we alter magnitude)
@@ -96,17 +96,17 @@ public class Ball extends Actor {
 						dx = 1.2 * dx;
 					}
 				}
-				else if (fromLeftEdge < paddle.getWidth()/3.0) {
+				else if (fromLeftEdge < paddle.getWidth()/3.0 && paddle.getMoveDirection() < 0) {
 					// 1/3rd and lower region
 					dx = -1.0 * origDx;
 					
 				}
-				else if (fromLeftEdge >= paddle.getWidth() * 2.0/3.0) {
+				else if (fromLeftEdge >= paddle.getWidth() * 2.0/3.0 && paddle.getMoveDirection() > 0) {
 					// 2/3rd and greater region
 					dx = 1.0 * origDx;
 				}
 				
-				didHitPaddle = true;
+				didCollideWithPaddle = true;
 			}
 
 		}

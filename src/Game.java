@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -8,19 +9,31 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Game extends Application {
+	
+	Paddle paddle;
+	BallWorld ballWorld;
+	double mouseX;
+	double mouseY;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	
+	
 	@Override
 	public void start(Stage stage) throws Exception {
 		
+		
+		
 		stage.setTitle("Ball Game");
+		
+		MyAnimationTimer animationTimer = new MyAnimationTimer();
+		animationTimer.start();
 		
 		BorderPane screen = new BorderPane();
 		
 		// BallWorld Objects
-		Paddle paddle = new Paddle();
+		paddle = new Paddle();
 		paddle.setX(300);
 		paddle.setY(350);
 		
@@ -40,13 +53,27 @@ public class Game extends Application {
 		brick3.setY(200);
 		
 		// BallWorld
-		BallWorld ballWorld = new BallWorld();
+		ballWorld = new BallWorld();
 		ballWorld.setPrefWidth(600);
 		ballWorld.setPrefHeight(400);
-		ballWorld.setOnMouseMoved(mouseEvent -> paddle.setX(mouseEvent.getX() - paddle.getWidth()/2.0));
 		ballWorld.setOnKeyPressed(keyEvent -> ballWorld.addKeyDown(keyEvent.getCode()));
-		ballWorld.setOnKeyReleased(keyEvent -> ballWorld.removeKeyDown(keyEvent.getCode()));
-
+		ballWorld.setOnKeyReleased(keyEvent -> {
+			ballWorld.removeKeyDown(keyEvent.getCode());
+			paddle.setMoveDirection(0);
+		});
+		ballWorld.setOnMouseMoved(mouseEvent -> {
+			mouseX = mouseEvent.getX();
+			mouseY = mouseEvent.getY();
+			
+			if (mouseEvent.getX() - paddle.getWidth()/2.0 > paddle.getX()) {
+				paddle.setMoveDirection(1);
+			}
+			else if (mouseEvent.getX() - paddle.getWidth()/2.0 < paddle.getX()) {
+				paddle.setMoveDirection(-1);
+			}
+			paddle.setX(mouseEvent.getX() - paddle.getWidth()/2.0);
+		});
+		
 		screen.setCenter(ballWorld);
 		
 		ballWorld.add(ball);
@@ -61,6 +88,31 @@ public class Game extends Application {
 		stage.show();
 
 		ballWorld.requestFocus();
+	}
+	
+	// Every millisecond (1e6 nanoseconds), test if the mouse
+	// position changed. If it didn't, set paddle's move direction
+	// to 0.
+	private class MyAnimationTimer extends AnimationTimer {
+
+		long oldTime = 0;
+		double mX = 0;
+		double mY = 0;
+		
+		@Override
+		public void handle(long now) {
+			if (now - oldTime >= 1e6) {
+				
+				if (ballWorld.isNoKeyDown()) {
+					if (mouseX == mX && mouseY == mY) {
+						paddle.setMoveDirection(0);
+					}
+					mX = mouseX;
+					mY = mouseY;
+				}
+				oldTime = now;
+			}
+		}
 	}
 
 }
