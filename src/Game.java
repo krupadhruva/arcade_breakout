@@ -30,7 +30,7 @@ public class Game extends Application {
         paddle.setX(300);
         paddle.setY(350);
 
-        Ball ball = new Ball(3, 3);
+        Ball ball = new Ball(6, 6);
         ball.setX(300);
         ball.setY(200);
 
