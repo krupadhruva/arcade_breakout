@@ -4,7 +4,6 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 
 public abstract class Actor extends ImageView {
-
     // Methods
     public void move(double dx, double dy) {
         this.setX(getX() + dx);
@@ -24,15 +23,19 @@ public abstract class Actor extends ImageView {
     }
 
     public <A extends Actor> java.util.List<A> getIntersectingObjects(java.lang.Class<A> cls) {
-
-        ArrayList<A> list = new ArrayList<A>();
+        final ArrayList<A> list = new ArrayList<A>();
 
         for (Node obj : this.getWorld().getChildren()) {
-            A object = (A) obj;
-            if (!object.equals(this)
-                    && object.getClass().getTypeName().equals(cls.getTypeName())
-                    && object.intersects(this.getBoundsInParent())) {
-                list.add(object);
+            // Skip intersecting with ourselves
+            if (equals(obj)) {
+                continue;
+            }
+
+            if (cls.isInstance(obj)) {
+                final A object = cls.cast(obj);
+                if (object.intersects(this.getBoundsInParent())) {
+                    list.add(object);
+                }
             }
         }
 
@@ -40,13 +43,15 @@ public abstract class Actor extends ImageView {
     }
 
     public <A extends Actor> A getOneIntersectingObject(java.lang.Class<A> cls) {
-
         for (Node obj : this.getWorld().getChildren()) {
-            if (obj instanceof Actor) {
-                A object = (A) obj;
-                if (!object.equals(this)
-                        && object.getClass().getTypeName().equals(cls.getTypeName())
-                        && object.intersects(this.getBoundsInParent())) {
+            // Skip intersecting with ourselves
+            if (equals(obj)) {
+                continue;
+            }
+
+            if (cls.isInstance(obj)) {
+                final A object = cls.cast(obj);
+                if (object.intersects(this.getBoundsInParent())) {
                     return object;
                 }
             }
