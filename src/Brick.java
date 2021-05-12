@@ -1,16 +1,18 @@
 import javafx.scene.image.Image;
 
-public class Brick extends Actor {
+public class Brick extends CollisionItem {
 
-    public Brick() {
-        String path = getClass().getClassLoader().getResource("resources/brick.png").toString();
-        Image img = new Image(path);
-        this.setImage(img);
+    public Brick(double x, double y) {
+        final String path =
+                getClass().getClassLoader().getResource("resources/brick.png").toString();
+        setImage(new Image(path));
+
+        setX(x);
+        setY(y);
     }
 
     @Override
-    public void act(long now) {
-        // TODO Auto-generated method stub
-
+    void onCollision(CollisionItem other) {
+        getWorld().remove(this);
     }
 }

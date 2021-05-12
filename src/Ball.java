@@ -1,128 +1,51 @@
 import javafx.scene.image.Image;
 
-public class Ball extends Actor {
-
-    // Attributes
+public class Ball extends CollisionItem {
+    // Speed in X and Y direction (pixels to move per invocation)
     private double dx;
     private double dy;
 
-    // Used to prevent altering magnitude on continuous repeat collisions
-    private boolean magnitudeAltered;
+    // Ensure we retain the original speed when we change dx or dy (angle)
+    private final double speed;
 
-    private boolean didCollideWithPaddle;
-
-    // Required to restore magnitude to prevent gain/dampening effect
-    private final double origDx;
-    private final double origDy;
-
-    // Comparing doubles with user defined precision
-    static double round(double val, double precision) {
-        double factor = Math.pow(10.0, precision);
-        return (double) ((int) (val * factor)) / factor;
+    public void setAngle(double deg) {
+        dx = Math.sin(deg * Math.PI / 180.0) * speed;
+        dy = Math.cos(deg * Math.PI / 180.0) * speed;
     }
 
-    // Helper method to find direction of ball
-    static double getSign(double val) {
-        return val < 0.0 ? -1.0 : 1.0;
+    public double getAngle() {
+        return 180 * Math.atan(dy / dx) / Math.PI;
     }
 
     // Constructor
-    public Ball(double dx, double dy) {
-        origDx = dx;
-        origDy = dy;
-        magnitudeAltered = false;
-        didCollideWithPaddle = false;
+    public Ball(double x, double y, double dx, double dy) {
+        final String path =
+                getClass().getClassLoader().getResource("resources/ball.png").toString();
+        setImage(new Image(path));
 
-        String path = getClass().getClassLoader().getResource("resources/ball.png").toString();
-        Image img = new Image(path);
-        this.setImage(img);
+        setX(x);
+        setY(y);
 
         this.dx = dx;
         this.dy = dy;
+        speed = Math.sqrt(Math.pow(dx, 2.0) + Math.pow(dy, 2.0));
+    }
+
+    // Used by walls to reverse the direction of ball on collision
+    public void reverseX() {
+        dx = -dx;
+    }
+
+    public void reverseY() {
+        dy = -dy;
     }
 
     @Override
     public void act(long now) {
-
         this.move(dx, dy);
 
-        // score adjustment
-        if ((this.getY() + this.getHeight()) >= this.getWorld().getHeight()) {
-            int value = ((BallWorld) getWorld()).getScore().getValue() - 1000;
-            ((BallWorld) getWorld()).getScore().setValue(value);
-        }
-
-        // Wall collision: Restore velocity along X & Y axis to prevent gain
-        // Done by flipping direction by restoring magnitude
-        if ((this.getX() + this.getWidth()) >= this.getWorld().getWidth() || (this.getX()) <= 0) {
-            magnitudeAltered = false;
-            dx = -1.0 * origDx * getSign(dx);
-        }
-
-        if ((this.getY() + this.getHeight()) >= this.getWorld().getHeight() || (this.getY()) <= 0) {
-            magnitudeAltered = false;
-            dy = -1.0 * origDy * getSign(dy);
-        }
-
-        // Paddle collision: Alter the X & Y velocity to give a sharp bounce
-        // Done by flipping direction if needed and magnitude by a factor
-        Paddle paddle = getOneIntersectingObject(Paddle.class);
-        if (paddle == null) {
-            didCollideWithPaddle = false;
-        } else {
-
-            if (!didCollideWithPaddle) {
-                final double fromLeftEdge = round(getX() - paddle.getX(), 2);
-
-                // Between 1/3rd and 2/3rd (for others, we alter magnitude)
-                dy = -dy;
-
-                if (fromLeftEdge <= 0) {
-                    if (!magnitudeAltered) {
-                        magnitudeAltered = true;
-                        dy = 0.8 * dy;
-                        dx = 1.2 * dx;
-                    }
-                } else if (fromLeftEdge >= paddle.getWidth()) {
-                    if (!magnitudeAltered) {
-                        magnitudeAltered = true;
-                        dy = 0.8 * dy;
-                        dx = 1.2 * dx;
-                    }
-                } else if (fromLeftEdge < paddle.getWidth() / 3.0
-                        && paddle.getMoveDirection() < 0) {
-                    // 1/3rd and lower region
-                    dx = -1.0 * origDx;
-
-                } else if (fromLeftEdge >= paddle.getWidth() * 2.0 / 3.0
-                        && paddle.getMoveDirection() > 0) {
-                    // 2/3rd and greater region
-                    dx = 1.0 * origDx;
-                }
-
-                didCollideWithPaddle = true;
-            }
-        }
-
-        // Brick collision
-        Brick brick = this.getOneIntersectingObject(Brick.class);
-        if (brick != null) {
-            // set score after hitting brick
-            int value = ((BallWorld) getWorld()).getScore().getValue() + 100;
-            ((BallWorld) getWorld()).getScore().setValue(value);
-
-            if (this.getX() + this.getWidth() / 2 >= brick.getX()
-                    && this.getX() + this.getWidth() / 2 <= brick.getX() + brick.getWidth()) {
-                dy = dy * -1;
-            } else if (this.getY() + this.getHeight() / 2 >= brick.getY()
-                    && this.getY() + this.getHeight() / 2 <= brick.getY() + brick.getHeight()) {
-                dx = dx * -1;
-            } else {
-                dx = dx * -1;
-                dy = dy * -1;
-            }
-
-            getWorld().remove(brick);
+        for (CollisionItem item : getIntersectingObjects(CollisionItem.class)) {
+            item.onCollision(this);
         }
     }
 }

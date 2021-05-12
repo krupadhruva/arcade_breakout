@@ -1,6 +1,5 @@
 public class BallWorld extends World {
-
-    private Score score;
+    private final Score score;
 
     public BallWorld() {
         score = new Score();
