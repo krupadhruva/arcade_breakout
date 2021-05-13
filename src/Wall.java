@@ -57,15 +57,26 @@ public class Wall extends CollisionItem {
     void onCollision(CollisionItem other) {
         if (other instanceof Ball) {
             final Ball ball = (Ball) other;
+            final double angle = ball.getAngle();
 
             switch (pos) {
                 case TOP:
                     ball.setY(getY() + getHeight());
-                    ball.reverseY();
+                    if (angle >= 270) {
+                        ball.setAngle(45);
+                    } else {
+                        ball.setAngle(135);
+                    }
+
                     break;
                 case BOTTOM:
                     ball.setY(getY() - ball.getHeight());
-                    ball.reverseY();
+                    if (angle >= 90) {
+                        ball.setAngle(225);
+                    } else {
+                        ball.setAngle(315);
+                    }
+
                     setOpacity(1);
 
                     // Score adjustment on ball hitting bottom wall
@@ -75,11 +86,21 @@ public class Wall extends CollisionItem {
                     break;
                 case LEFT:
                     ball.setX(getX() + getWidth());
-                    ball.reverseX();
+                    if (angle >= 180) {
+                        ball.setAngle(315);
+                    } else {
+                        ball.setAngle(45);
+                    }
+
                     break;
                 case RIGHT:
                     ball.setX(getX() - ball.getWidth());
-                    ball.reverseX();
+                    if (angle >= 270) {
+                        ball.setAngle(225);
+                    } else {
+                        ball.setAngle(135);
+                    }
+
                     break;
             }
         }

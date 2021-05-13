@@ -24,7 +24,7 @@ public class Game extends Application {
         screen.setCenter(ballWorld);
 
         // BallWorld Objects
-        ballWorld.add(new Ball(300, 200, 6, 6));
+        ballWorld.add(new Ball(300, 200, 7, 7));
         ballWorld.add(new Paddle(300, 350));
 
         // Add side walls - will make them selectively reactive later
