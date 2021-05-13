@@ -5,11 +5,12 @@ import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public abstract class World extends Pane {
 
     // Attributes
-    private AnimationTimer timer;
+    private final AnimationTimer timer;
     private final HashSet<KeyCode> keyDown;
 
     // Constructor
@@ -65,18 +66,15 @@ public abstract class World extends Pane {
     }
 
     public boolean isNoKeyDown() {
-        if (keyDown.isEmpty()) return true;
-        else return false;
+        return keyDown.isEmpty();
     }
 
     public <A extends Actor> java.util.List<A> getObjects(java.lang.Class<A> cls) {
-
-        ArrayList<A> list = new ArrayList<A>();
+        final List<A> list = new ArrayList<A>();
 
         for (Node obj : this.getChildren()) {
-            A object = (A) obj;
-            if (object.getClass().getTypeName().equals(cls.getTypeName())) {
-                list.add(object);
+            if (cls.isInstance(obj)) {
+                list.add(cls.cast(obj));
             }
         }
 
