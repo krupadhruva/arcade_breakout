@@ -1,18 +1,44 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class Game extends Application {
     public static void main(String[] args) {
         launch(args);
     }
 
+    // Set the image path as background in pane
+    private void setBackground(BorderPane pane, String path) {
+        pane.setBackground(
+                new Background(
+                        new BackgroundImage(
+                                new Image(
+                                        Objects.requireNonNull(
+                                                        getClass()
+                                                                .getClassLoader()
+                                                                .getResource(path))
+                                                .toString()),
+                                null,
+                                null,
+                                BackgroundPosition.CENTER,
+                                null)));
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Ball Game");
-        BorderPane screen = new BorderPane();
+
+        // Setup a pane with light background image
+        final BorderPane screen = new BorderPane();
+        setBackground(screen, "resources/light_background.png");
 
         // BallWorld
         BallWorld ballWorld = new BallWorld();
