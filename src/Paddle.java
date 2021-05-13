@@ -25,15 +25,10 @@ public class Paddle extends CollisionItem {
         if (!lazyInitialized) {
             getWorld()
                     .setOnMouseMoved(
-                            mouseEvent -> {
-                                double iniX = getX();
-                                if (mouseEvent.getX() + getWidth() > getWorld().getWidth()) {
-                                    setX(getWorld().getWidth() - getWidth());
-                                } else if (mouseEvent.getX() >= 0.0) {
-                                    setX(mouseEvent.getX());
-                                }
-
-                                direction = Double.compare(getX(), iniX);
+                            event -> {
+                                double dispX = event.getX() - getX();
+                                move(dispX, 0.0);
+                                direction = Double.compare(dispX, 0.0);
                             });
             lazyInitialized = true;
         }
@@ -44,20 +39,16 @@ public class Paddle extends CollisionItem {
         lazyInitializeOnce();
 
         direction = 0;
-        if (getWorld().isKeyDown(KeyCode.LEFT) && getX() > 0.0) {
+        if (getWorld().isKeyDown(KeyCode.LEFT)) {
             delta = -Math.abs(delta);
             direction = -1;
-        } else if (getWorld().isKeyDown(KeyCode.RIGHT)
-                && (getX() + getWidth()) < getWorld().getWidth()) {
+        } else if (getWorld().isKeyDown(KeyCode.RIGHT)) {
             delta = Math.abs(delta);
             direction = 1;
         }
 
         if (direction != 0) {
-            double x = getX() + delta;
-            if (x >= 0.0 && (x + getWidth()) <= getWorld().getWidth()) {
-                setX(x);
-            }
+            move(delta, 0.0);
         }
     }
 

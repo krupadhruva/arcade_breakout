@@ -40,8 +40,8 @@ public class Ball extends CollisionItem {
 
     @Override
     public void act(long now) {
-        double dy = Math.round(Math.sin(deg * Math.PI / 180.0) * speed);
         double dx = Math.round(Math.cos(deg * Math.PI / 180.0) * speed);
+        double dy = Math.round(Math.sin(deg * Math.PI / 180.0) * speed);
 
         this.move(dx, dy);
 
