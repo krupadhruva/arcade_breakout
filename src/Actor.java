@@ -1,7 +1,9 @@
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Actor extends ImageView {
     // Methods
@@ -22,8 +24,8 @@ public abstract class Actor extends ImageView {
         return this.getBoundsInParent().getHeight();
     }
 
-    public <A extends Actor> java.util.List<A> getIntersectingObjects(java.lang.Class<A> cls) {
-        final ArrayList<A> list = new ArrayList<A>();
+    public <A extends Actor> Collection<A> getIntersectingObjects(java.lang.Class<A> cls) {
+        final Set<A> list = new HashSet<>();
 
         for (Node obj : this.getWorld().getChildren()) {
             // Skip intersecting with ourselves

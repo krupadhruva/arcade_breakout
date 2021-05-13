@@ -29,7 +29,7 @@ public class Paddle extends CollisionItem {
                                 double iniX = getX();
                                 if (mouseEvent.getX() + getWidth() > getWorld().getWidth()) {
                                     setX(getWorld().getWidth() - getWidth());
-                                } else {
+                                } else if (mouseEvent.getX() >= 0.0) {
                                     setX(mouseEvent.getX());
                                 }
 
@@ -64,11 +64,12 @@ public class Paddle extends CollisionItem {
     @Override
     void onCollision(CollisionItem other) {
         // For now, we are only interested in ball
-        if (!(other instanceof Ball)) {
-            return;
+        if (other instanceof Ball) {
+            onCollisionWithBall((Ball) other);
         }
+    }
 
-        final Ball ball = (Ball) other;
+    private void onCollisionWithBall(Ball ball) {
         final double angle = ball.getAngle();
         final boolean top = (ball.getY() + ball.getHeight() / 2.0) < (getY() + getHeight() / 2.0);
 

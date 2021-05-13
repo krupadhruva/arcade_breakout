@@ -1,6 +1,14 @@
 import javafx.scene.image.Image;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Ball extends CollisionItem {
+    // Ball ends up repeatedly colliding with paddle/wall depending on angle of collision
+    // Keeping track of previous collisions and skipping them prevents ball getting stuck
+    private final Set<CollisionItem> previousCollisions;
+
     // Angle of travel
     private double deg;
 
@@ -27,6 +35,7 @@ public class Ball extends CollisionItem {
 
         speed = Math.sqrt(Math.pow(dx, 2.0) + Math.pow(dy, 2.0));
         setAngle(315);
+        previousCollisions = new HashSet<>();
     }
 
     @Override
@@ -36,8 +45,14 @@ public class Ball extends CollisionItem {
 
         this.move(dx, dy);
 
-        for (CollisionItem item : getIntersectingObjects(CollisionItem.class)) {
-            item.onCollision(this);
+        final Collection<CollisionItem> collisions = getIntersectingObjects(CollisionItem.class);
+        previousCollisions.retainAll(collisions);
+
+        for (CollisionItem item : collisions) {
+            if (!previousCollisions.contains(item)) {
+                previousCollisions.add(item);
+                item.onCollision(this);
+            }
         }
     }
 }
