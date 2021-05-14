@@ -21,6 +21,10 @@ public class Wall extends CollisionItem {
         setImage(image);
     }
 
+    public Position getPos() {
+        return pos;
+    }
+
     @Override
     public void act(long now) {
         // FIXME: Support resizing the walls when window size changes

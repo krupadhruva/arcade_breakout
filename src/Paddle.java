@@ -53,6 +53,21 @@ public class Paddle extends CollisionItem {
     }
 
     @Override
+    public void move(double dx, double dy) {
+        super.move(dx, dy);
+
+        // Ensure paddle does not go through the wall
+        final Wall wall = getOneIntersectingObject(Wall.class);
+        if (wall != null) {
+            if (wall.getPos() == Wall.Position.LEFT) {
+                setX(wall.getWidth());
+            } else {
+                setX(wall.getX() - getWidth());
+            }
+        }
+    }
+
+    @Override
     void onCollision(CollisionItem other) {
         // For now, we are only interested in ball
         if (other instanceof Ball) {
