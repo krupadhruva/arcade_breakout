@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class BottomWall extends Wall {
     private final MediaPlayer sound;
+    private final boolean withSound;
 
     public BottomWall(Position pos, double width, double height, Color color) {
         super(pos, width, height, color);
@@ -21,9 +22,8 @@ public class BottomWall extends Wall {
                                                         .getResource("resources/impact.mp3"))
                                         .toString()));
 
-        // HACK: Load the player once to ensure it is initialized and
-        // does not stutter when playing audio on first impact
-        sound.seek(Duration.INDEFINITE);
+        // FIXME: Audio play continues to cause stutter in animation
+        this.withSound = System.getenv().containsKey("DEBUG");
     }
 
     @Override
@@ -60,7 +60,9 @@ public class BottomWall extends Wall {
         final BallWorld world = (BallWorld) getWorld();
         world.getScore().setValue(world.getScore().getValue() - 1);
 
-        sound.seek(Duration.ZERO);
-        sound.play();
+        if (withSound) {
+            sound.seek(Duration.ZERO);
+            sound.play();
+        }
     }
 }

@@ -81,17 +81,9 @@ public class Paddle extends CollisionItem {
         } else if (ball.getX() < (getX() + getWidth() / 3.0)) {
             // Left part of paddle
             if (top) {
-                if (angle > 90) {
-                    ball.setAngle(angle + 60);
-                } else {
-                    ball.setAngle(angle - 60);
-                }
+                ball.setAngle(200);
             } else {
-                if (angle > 270) {
-                    ball.setAngle(angle + 60);
-                } else {
-                    ball.setAngle(angle - 60);
-                }
+                ball.setAngle(160);
             }
         } else if (ball.getX() > (getX() + getWidth() * 2.0 / 3.0)) {
             // Right part of paddle
