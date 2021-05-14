@@ -20,6 +20,10 @@ public class BottomWall extends Wall {
                                                         .getClassLoader()
                                                         .getResource("resources/impact.mp3"))
                                         .toString()));
+
+        // HACK: Load the player once to ensure it is initialized and
+        // does not stutter when playing audio on first impact
+        sound.seek(Duration.INDEFINITE);
     }
 
     @Override
@@ -56,7 +60,6 @@ public class BottomWall extends Wall {
         final BallWorld world = (BallWorld) getWorld();
         world.getScore().setValue(world.getScore().getValue() - 1);
 
-        // FIXME: This stutters the first time till it loads and initializes player
         sound.seek(Duration.ZERO);
         sound.play();
     }
