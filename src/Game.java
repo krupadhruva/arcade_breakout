@@ -55,9 +55,9 @@ public class Game extends Application {
 
         // Add side walls - will make them selectively reactive later
         ballWorld.add(new Wall(Wall.Position.TOP, 100, 5, Color.CADETBLUE));
-        ballWorld.add(new Wall(Wall.Position.BOTTOM, 100, 5, Color.CRIMSON));
         ballWorld.add(new Wall(Wall.Position.LEFT, 5, 100, Color.CADETBLUE));
         ballWorld.add(new Wall(Wall.Position.RIGHT, 5, 100, Color.CADETBLUE));
+        ballWorld.add(new BottomWall(Wall.Position.BOTTOM, 100, 5, Color.CRIMSON));
 
         // test bricks; remove if you need to
         ballWorld.add(new Brick(400, 200));

@@ -1,15 +1,9 @@
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
-
-import java.util.Objects;
 
 public class Wall extends CollisionItem {
     private final Position pos;
-    private final Color color;
-    private final MediaPlayer sound;
 
     enum Position {
         TOP,
@@ -19,26 +13,12 @@ public class Wall extends CollisionItem {
     }
 
     public Wall(Position pos, double width, double height, Color color) {
-        Rectangle rect = new Rectangle(width, height);
-        rect.setFill(color);
-        setImage(rect.snapshot(null, null));
+        this(pos, new Rectangle(width, height, color).snapshot(null, null));
+    }
 
+    public Wall(Position pos, Image image) {
         this.pos = pos;
-        this.color = color;
-
-        if (pos == Position.BOTTOM) {
-            setOpacity(0.25);
-            sound =
-                    new MediaPlayer(
-                            new Media(
-                                    Objects.requireNonNull(
-                                                    getClass()
-                                                            .getClassLoader()
-                                                            .getResource("resources/impact.mp3"))
-                                            .toString()));
-        } else {
-            sound = null;
-        }
+        setImage(image);
     }
 
     @Override
@@ -93,16 +73,6 @@ public class Wall extends CollisionItem {
                         ball.setAngle(315);
                     }
 
-                    setOpacity(1);
-
-                    // Score adjustment on ball hitting bottom wall
-                    final BallWorld world = (BallWorld) getWorld();
-                    world.getScore().setValue(world.getScore().getValue() - 1);
-
-                    if (sound != null) {
-                        sound.seek(Duration.ZERO);
-                        sound.play();
-                    }
                     break;
                 case LEFT:
                     ball.setX(getX() + getWidth());
