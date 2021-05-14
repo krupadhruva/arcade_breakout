@@ -1,9 +1,15 @@
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+
+import java.util.Objects;
 
 public class Wall extends CollisionItem {
     private final Position pos;
     private final Color color;
+    private final MediaPlayer sound;
 
     enum Position {
         TOP,
@@ -22,6 +28,16 @@ public class Wall extends CollisionItem {
 
         if (pos == Position.BOTTOM) {
             setOpacity(0.25);
+            sound =
+                    new MediaPlayer(
+                            new Media(
+                                    Objects.requireNonNull(
+                                                    getClass()
+                                                            .getClassLoader()
+                                                            .getResource("resources/impact.mp3"))
+                                            .toString()));
+        } else {
+            sound = null;
         }
     }
 
@@ -83,6 +99,10 @@ public class Wall extends CollisionItem {
                     final BallWorld world = (BallWorld) getWorld();
                     world.getScore().setValue(world.getScore().getValue() - 1);
 
+                    if (sound != null) {
+                        sound.seek(Duration.ZERO);
+                        sound.play();
+                    }
                     break;
                 case LEFT:
                     ball.setX(getX() + getWidth());
