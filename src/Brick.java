@@ -29,11 +29,15 @@ public class Brick extends CollisionItem {
     @Override
     void onCollision(CollisionItem other) {
         // This brick has collided and is exploding, nothing much to do...
-        if (hasCollided) {
+        if (hasCollided || !(other instanceof Ball)) {
             return;
         }
 
         hasCollided = true;
+
+        // Rebound the ball on collision with brick
+        final Ball ball = (Ball) other;
+        ball.setAngle(ball.getAngle() + 90.0);
 
         final Timeline tl =
                 new Timeline(
