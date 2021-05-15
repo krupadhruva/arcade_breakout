@@ -50,7 +50,7 @@ public class Game extends Application {
         screen.setCenter(ballWorld);
 
         // BallWorld Objects
-        ballWorld.add(new Ball(300, 200, 7, 7));
+        ballWorld.add(new Ball(300, 100, 6, 6));
         ballWorld.add(new Paddle(300, 350));
 
         // Add side walls - will make them selectively reactive later
@@ -59,9 +59,9 @@ public class Game extends Application {
         ballWorld.add(new Wall(Wall.Position.RIGHT, 5, 100, Color.CADETBLUE));
         ballWorld.add(new BottomWall(Wall.Position.BOTTOM, 100, 5, Color.CRIMSON));
 
-        // test bricks; remove if you need to
-        ballWorld.add(new Brick(400, 200));
-        ballWorld.add(new Brick(450, 200));
+        // TODO: Create different/random patterns
+        ballWorld.add(new Brick(100, 200));
+        ballWorld.add(new Brick(300, 200));
         ballWorld.add(new Brick(500, 200));
 
         Scene scene = new Scene(screen);
