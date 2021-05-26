@@ -60,5 +60,10 @@ public class Brick extends CollisionItem {
         setImage(explodeImg);
         setFitWidth(1.5 * origW);
         setFitHeight(1.5 * origH);
+
+        // End game when all bricks have exploded
+        if (getWorld().getObjects(Brick.class).size() <= 1) {
+            getWorld().remove(ball);
+        }
     }
 }
