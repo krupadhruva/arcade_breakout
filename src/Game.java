@@ -54,15 +54,18 @@ public class Game extends Application {
         ballWorld.add(new Paddle(300, 350));
 
         // Add side walls - will make them selectively reactive later
+
         ballWorld.add(new Wall(Wall.Position.TOP, 100, 5, Color.CADETBLUE));
         ballWorld.add(new Wall(Wall.Position.LEFT, 5, 100, Color.CADETBLUE));
         ballWorld.add(new Wall(Wall.Position.RIGHT, 5, 100, Color.CADETBLUE));
         ballWorld.add(new BottomWall(Wall.Position.BOTTOM, 100, 5, Color.CRIMSON));
 
         // TODO: Create different/random patterns
-        ballWorld.add(new Brick(100, 200));
-        ballWorld.add(new Brick(300, 200));
-        ballWorld.add(new Brick(500, 200));
+        for (int row = 1; row < 5; ++row) {
+            ballWorld.add(new Brick(100, (row * 50), 25, 10));
+            ballWorld.add(new Brick(300, (row * 50), 25, 10));
+            ballWorld.add(new Brick(500, (row * 50), 25, 10));
+        }
 
         Scene scene = new Scene(screen);
         stage.setScene(scene);

@@ -10,7 +10,7 @@ public class Brick extends CollisionItem {
 
     private final Image explodeImg;
 
-    public Brick(double x, double y) {
+    public Brick(double x, double y, double width, double height) {
         hasCollided = false;
         explodeImg =
                 new Image(
@@ -22,6 +22,11 @@ public class Brick extends CollisionItem {
         setImage(
                 new Image(
                         getClass().getClassLoader().getResource("resources/brick.png").toString()));
+
+        // Fix the brick size so that we can replace with any image
+        setFitWidth(width);
+        setFitHeight(height);
+
         setX(x);
         setY(y);
     }
