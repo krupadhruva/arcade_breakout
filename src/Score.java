@@ -1,5 +1,7 @@
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class Score extends Text {
     // Attributes
@@ -8,13 +10,15 @@ public class Score extends Text {
     // Constructors
     public Score() {
         value = 0;
-        this.setFont(Font.font(14));
+        setFont(Font.font(14));
+        setFill(Color.DARKBLUE);
+        setTextAlignment(TextAlignment.CENTER);
         updateDisplay();
     }
 
     // Methods
     public void updateDisplay() {
-        this.setText(String.valueOf(value));
+        this.setText(String.format("Score: %d", value));
     }
 
     public int getValue() {

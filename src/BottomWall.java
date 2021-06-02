@@ -58,7 +58,7 @@ public class BottomWall extends Wall {
 
         // Score adjustment on ball hitting bottom wall
         final BallWorld world = (BallWorld) getWorld();
-        world.getScore().setValue(world.getScore().getValue() - 1);
+        world.getScore().setValue(world.getScore().getValue() - 5);
 
         if (withSound) {
             sound.seek(Duration.ZERO);

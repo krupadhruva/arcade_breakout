@@ -40,17 +40,21 @@ public class Game extends Application {
         final BorderPane screen = new BorderPane();
         setBackground(screen, "resources/light_background.png");
 
+        // Score card
+        Score score = new Score();
+
         // BallWorld
-        BallWorld ballWorld = new BallWorld();
+        BallWorld ballWorld = new BallWorld(score);
         ballWorld.setPrefWidth(600);
         ballWorld.setPrefHeight(400);
         ballWorld.setOnKeyPressed(keyEvent -> ballWorld.addKeyDown(keyEvent.getCode()));
         ballWorld.setOnKeyReleased(keyEvent -> ballWorld.removeKeyDown(keyEvent.getCode()));
 
         screen.setCenter(ballWorld);
+        screen.setTop(score);
 
         // BallWorld Objects
-        ballWorld.add(new Ball(300, 100, 6, 6));
+        ballWorld.add(new Ball(300, 100, 6, 6, 3));
         ballWorld.add(new Paddle(300, 350));
 
         // Add side walls - will make them selectively reactive later

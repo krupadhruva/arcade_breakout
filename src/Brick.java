@@ -1,15 +1,6 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class Brick extends CollisionItem {
@@ -49,8 +40,13 @@ public class Brick extends CollisionItem {
 
         hasCollided = true;
 
+        final BallWorld world = (BallWorld) getWorld();
+        world.getScore().setValue(world.getScore().getValue() + 10);
+
         // Rebound the ball on collision with brick
         final Ball ball = (Ball) other;
+        ball.resetPenaltyTimeout();
+
         ball.setAngle(ball.getAngle() + 90.0);
 
         final Timeline tl =
@@ -72,21 +68,7 @@ public class Brick extends CollisionItem {
 
         // End game when all bricks have exploded
         if (getWorld().getObjects(Brick.class).size() <= 1) {
-            getWorld().remove(ball);
-            Text txt = new Text("** Game Over **");
-            txt.setFill(Color.RED);
-            txt.setTextAlignment(TextAlignment.CENTER);
-            txt.setFont(Font.font("Monaco", 16));
-
-            BorderPane screen = (BorderPane) getWorld().getParent();
-            screen.setBackground(
-                    new Background(
-                            new BackgroundImage(
-                                    txt.snapshot(null, null),
-                                    BackgroundRepeat.NO_REPEAT,
-                                    BackgroundRepeat.NO_REPEAT,
-                                    BackgroundPosition.CENTER,
-                                    null)));
+            ((BallWorld) getWorld()).gameOver();
         }
     }
 }

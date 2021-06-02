@@ -56,6 +56,9 @@ public class Wall extends CollisionItem {
     @Override
     void onCollision(CollisionItem other) {
         if (other instanceof Ball) {
+            final BallWorld world = (BallWorld) getWorld();
+            world.getScore().setValue(world.getScore().getValue() + 1);
+
             final Ball ball = (Ball) other;
             final double angle = ball.getAngle();
 
